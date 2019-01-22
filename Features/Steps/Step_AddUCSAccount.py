@@ -1,9 +1,12 @@
-import behave
-from selenium import webdriver
 from Lib import configReader
+from utils import util as util
+from PyScripts import *
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
+import moment
+import allure
 
 @given(u'user logged in UCSD Successfully')
 def step_impl(context):
@@ -53,8 +56,7 @@ def step_impl(context):
 def step_impl(context):
     try:
         WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH,(configReader.fetchElementLocators("UCSADD", "physicalacct_add_button_xpath")))))
-        context.driver.find_element_by_xpath(
-            (configReader.fetchElementLocators("UCSADD", "physicalacct_add_button_xpath"))).click()
+        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "physicalacct_add_button_xpath"))).click()
 
     except:
         print("Unable to click Add Button")
@@ -75,7 +77,7 @@ def step_impl(context):
     try:
         WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH,(configReader.fetchElementLocators("UCSADD", "ucs_acctname_xpath") ))))
         context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctname_xpath"))).clear()
-        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctname_xpath"))).send_keys("UCSMAccount")
+        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctname_xpath"))).send_keys("UCS-70")
     except:
         print("Unable to Enter UCS Account IP")
 
@@ -85,7 +87,7 @@ def step_impl(context):
     try:
         WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH,(configReader.fetchElementLocators("UCSADD", "ucs_acctip_xpath")))))
         context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctip_xpath"))).clear()
-        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctip_xpath"))).send_keys("10.23.209.23")
+        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_acctip_xpath"))).send_keys("172.22.233.70")
     except:
         print("Unable to Enter UCS Account IP")
 
@@ -105,7 +107,7 @@ def step_impl(context):
     try:
         WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH,(configReader.fetchElementLocators("UCSADD", "ucs_ucspassword_xpath") ))))
         context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_ucspassword_xpath"))).clear()
-        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_ucspassword_xpath"))).send_keys("Cloupia!123")
+        context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_ucspassword_xpath"))).send_keys("cloupia12345")
     except:
         print("Unable to Enter UCS Password")
 
@@ -125,16 +127,34 @@ def step_impl(context):
 @when(u'user click ucs add button')
 def step_impl(context):
     try:
-        WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH, (configReader.fetchElementLocators("UCSADD", "ucs_add_button")))))
+        time.sleep(5)
         context.driver.find_element_by_xpath((configReader.fetchElementLocators("UCSADD", "ucs_add_button"))).click()
+        WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH, (configReader.fetchElementLocators("UCSADD", "ucs_add_button")))))
+        logstatus = ucsd_infra_log_validator.ucsd_log_validator(util.sshServer, util.sshUsername, util.sshPassword)
 
     except:
         print("Unable to click ucs add button")
 
 
+
+
 @then(u'UCS Account should be added successfully')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then UCS Account should be added successfully')
+    try:
+        WebDriverWait(context.driver, 30).until(EC.presence_of_element_located((By.XPATH, (configReader.fetchElementLocators("UCSADD", "ucs_add_success")))))
+        success = (context.driver.find_element_by_xpath(configReader.fetchElementLocators("UCSADD", "ucs_add_success")).text)
+        assert success == "Account added successfully"
+        print("UCS Account Added successfully")
+
+    except  AssertionError:
+        print("UCS Account Addition Failed")
+        # currTime = moment.now().strftime("%d-%m-%Y_%H-%M-%S")
+        # testName = util.whoami()
+        # screenshotName = testName + "_" + currTime
+        # allure.attach(context.driver.get_screenshot_as_png(), name=screenshotName,
+        #               attachment_type=allure.attachment_type.PNG)
+        # context.driver.get_screenshot_as_file("C:\Users\vijayago\PycharmProjects\UCSD_BDD_Framework\Screenshots" + screenshotName + ".png")
+
 
 
 

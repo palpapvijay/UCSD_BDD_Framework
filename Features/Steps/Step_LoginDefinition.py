@@ -1,6 +1,6 @@
-import behave
-from selenium import webdriver
 from Lib import configReader
+from utils import util as util
+from PyScripts import *
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -29,13 +29,15 @@ def step_impl(context):
 
 @when(u'user click submit button')
 def step_impl(context):
+    logstatus = ucsd_infra_log_validator.ucsd_log_validator(util.sshServer, util.sshUsername, util.sshPassword)
     context.driver.find_element_by_id(configReader.fetchElementLocators("Login", "submit_id")).click()
+    print(logstatus)
 
 
 @then(u'user should be logged in successfully')
 def step_impl(context):
     try:
-        WebDriverWait(context.driver, 30).until(EC.title_is("Cisco UCS Director"))
+        element = WebDriverWait(context.driver, 30).until(EC.title_is("Cisco UCS Director"))
         assert context.driver.title == "Cisco UCS Director"
 
     except AssertionError:
@@ -50,8 +52,17 @@ def step_impl(context):
 
 @then(u'UCSD should provide valid error message.')
 def step_impl(context):
-    title1 = context.driver.title
-    assert title1 == "Login"
+    try:
+        WebDriverWait(context.driver, 30).until(EC.presence_of_element_located(
+            (By.XPATH, (configReader.fetchElementLocators("Login", "Auth_Error")))))
+        Err = (context.driver.find_element_by_xpath(configReader.fetchElementLocators("Login", "Auth_Error")).text)
+        assert Err == "Authentication failed"
+        print("Proper Error Message displayed")
+
+    except AssertionError:
+        print("Proper Error Mesage Not displayed")
+        raise
+
 
 # @given(u'Given user logged in UCSD Successfully')
 # def step_impl(context):
