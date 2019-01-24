@@ -1,8 +1,8 @@
-Feature: Verify UCSD Login Features
-         Feature Listfile (List of feature filenames/directories)
+Feature: Verify UCSD Login Feature
+
 
 Background:
-          Given user is on UCSD Login Page
+          Given user is in UCSD Login Page
 
 @sanity
 Scenario: Login with Invalid UCSD Credentials
