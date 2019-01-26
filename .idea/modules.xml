@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../UCSD_Automation_Framework/.idea/UCSD_Automation_Framework.iml" filepath="$PROJECT_DIR$/../UCSD_Automation_Framework/.idea/UCSD_Automation_Framework.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/UCSD_BDD_Framework.iml" filepath="$PROJECT_DIR$/.idea/UCSD_BDD_Framework.iml" />
     </modules>
   </component>

@@ -1,9 +1,19 @@
 from selenium import webdriver
 from Lib import configReader
+import os
+import glob
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 # Before and After All feature
 def before_all(context):
+
+    print("Cleanup Logs and Snapshots Folders")
+    files = glob.glob('C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Logs/*')
+    for f in files:
+        os.remove(f)
+    files = glob.glob('C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Screenshots/*')
+    for f in files:
+        os.remove(f)
 
     if (configReader.readConfigData('Details', 'Browser')) == "chrome":
         path = "./Drivers/chromedriver.exe"
