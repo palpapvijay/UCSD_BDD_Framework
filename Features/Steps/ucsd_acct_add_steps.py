@@ -214,12 +214,15 @@ def validate_ucs_acct_addition(context):
     try:
         WebDriverWait(context.driver, 30).until(EC.element_to_be_clickable((By.XPATH, (configReader.fetchElementLocators("UCSADD", "ucs_add_success")))))
         success = (context.driver.find_element_by_xpath(configReader.fetchElementLocators("UCSADD", "ucs_add_success")).text)
-        if success == 'UCS-70':
-            print("UCS Account Added successfully.")
-    except:
-            print("UCS Account Addition Failed")
-            func_name = util.whoami()
-            ucsd_screenshot_attach_allure(context,func_name)
+        assert success == 'UCS-70'
+        print("UCS Account Added successfully.")
+
+    except AssertionError:
+        print("UCS Account Addition Failed")
+        func_name = util.whoami()
+        ucsd_screenshot_attach_allure(context, func_name)
+
+
 
 
 

@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import moment
+from Features.CommonFuncs.ucsd_common_func import *
 
 
 __author__ = 'vijayago'
@@ -31,14 +32,12 @@ Funtion to Enter Valid Username in UCSD Login Page
 def enter_valid_ucsd_username(context):
     context.driver.find_element_by_id(configReader.fetchElementLocators("Login", "username_id")).send_keys("admin")
 
-
 """
 Funtion to Enter Valid Password in UCSD Login Page
 """
 @when(u'user enters valid UCSD password')
 def enter_ucsd_password(context):
     context.driver.find_element_by_id(configReader.fetchElementLocators("Login", "password_id")).send_keys("admin")
-
 
 """
 Funtion to Click Submit Button in UCSD Login Page
@@ -47,20 +46,13 @@ Funtion to Click Submit Button in UCSD Login Page
 def click_ucsd_login_submit(context):
     try:
         context.driver.find_element_by_id(configReader.fetchElementLocators("Login", "submit_id")).click()
-        currTime = moment.now().strftime("%d-%m-%Y_%H-%M-%S")
-        testName = util.whoami()
-        Infrafilename = testName + "_" + currTime
-        conn = ucsd_infra_log_validator.ucsd_ssh_connector(util.sshServer, util.sshUsername, util.sshPassword)
-        ucsd_infra_log_validator.ucsd_error_file(conn, Infrafilename)
+        func_name = util.whoami()
+        ucsd_log_attach(func_name)
 
     except:
         print("Unable to Click Submit Button.. Exit Testing")
-        currTime = moment.now().strftime("%d-%m-%Y_%H-%M-%S")
-        testName = util.whoami()
-        Snapshotfilename = testName + "_" + currTime
-        context.driver.save_screenshot("C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Screenshots/" + Snapshotfilename + ".png")
-        print("Snapshot Taken")
-
+        func_name = util.whoami()
+        ucsd_screenshot_attach_allure(context, func_name)
 
 """
 Funtion to Validate UCSD Login Success
@@ -98,8 +90,7 @@ def ucsd_login_failure(context):
 
     except AssertionError:
         print("Proper Error Mesage Not displayed")
-        testName = util.whoami()
-        context.driver.get_screenshot_as_png("C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Screenshots" + testName + ".png")
-
+        func_name = util.whoami()
+        ucsd_screenshot_attach_allure(context, func_name)
 
 

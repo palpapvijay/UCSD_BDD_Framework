@@ -4,6 +4,9 @@ import os
 import glob
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+
+__author__ = 'vijayago'
+
 # Before and After All feature
 def before_all(context):
 
