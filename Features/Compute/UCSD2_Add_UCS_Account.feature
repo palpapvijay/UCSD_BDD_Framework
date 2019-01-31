@@ -2,7 +2,7 @@ Feature: Add Compute UCS Account in UCSD
 
 @sanity
 Scenario: Create Compute UCS Account in UCSD
-          Given user logged in UCSD Successfully
+          Given user should be logged in successfully
           When user click Administration Main Menu
           And user click Physical Accounts Sub Menu
           And user Navigate to the Physical Accounts Tab.

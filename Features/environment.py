@@ -11,10 +11,10 @@ __author__ = 'vijayago'
 def before_all(context):
 
     print("Cleanup Logs and Snapshots Folders")
-    files = glob.glob('C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Logs/*')
+    files = glob.glob('./Logs/*')
     for f in files:
         os.remove(f)
-    files = glob.glob('C:/Users/vijayago/PycharmProjects/UCSD_BDD_Framework/Screenshots/*')
+    files = glob.glob('./Screenshots/*')
     for f in files:
         os.remove(f)
 
